@@ -3,9 +3,9 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 
 
-class MainMenuScreen(Screen):
-    def __init__(self, **paraams):
-        super().__init__(**paraams)
+class Mainmenuscreen(Screen):
+    def __init__(self, **params):
+        super().__init__(**params)
         layout = BoxLayout(orientation="vertical")
 
         start_button = Button(

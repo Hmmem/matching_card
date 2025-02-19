@@ -1,1 +1,2 @@
-from .main_menu import MainMenuScreen
+from .main_menu import Mainmenuscreen
+from .game_screen import Gamescreen
