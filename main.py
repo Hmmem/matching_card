@@ -1,10 +1,13 @@
 from kivy.app import App
-from kivy.uix.label import Label
+from kivy.uix.screenmanager import ScreenManager
+from screens import MainMenuScreen
 
 
 class MyGame(App):
     def build(self):
-        return Label(text="STARTED!!", font_size=40)
+        SM = ScreenManager()
+        SM.add_widget(MainMenuScreen(name="main"))
+        return SM
 
 
 if __name__ == "__main__":
