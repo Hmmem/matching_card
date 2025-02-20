@@ -4,6 +4,24 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.graphics import Color, RoundedRectangle
 
 
+class Mainmenuscreen(Screen):
+    def __init__(self, **params):
+        super().__init__(**params)
+        layout = FloatLayout()
+
+        start_button = CustomButton(
+            text="Start Game",
+            pos_hint={"center_x": 0.5, "center_y": 0.5},
+        )
+        start_button.bind(on_press=self.switch_to_game)
+
+        layout.add_widget(start_button)
+        self.add_widget(layout)
+
+    def switch_to_game(self, instance):
+        self.manager.current = "Game"
+
+
 class CustomButton(Button):
     def __init__(self, **params):
         super().__init__(**params)
@@ -25,21 +43,3 @@ class CustomButton(Button):
     def update_rect(self, *args):
         self.rect.pos = self.pos
         self.rect.size = self.size
-
-
-class Mainmenuscreen(Screen):
-    def __init__(self, **params):
-        super().__init__(**params)
-        layout = FloatLayout()
-
-        start_button = CustomButton(
-            text="Start Game",
-            pos_hint={"center_x": 0.5, "center_y": 0.5},
-        )
-        start_button.bind(on_press=self.switch_to_game)
-
-        layout.add_widget(start_button)
-        self.add_widget(layout)
-
-    def switch_to_game(self, instance):
-        self.manager.current = "Game"
