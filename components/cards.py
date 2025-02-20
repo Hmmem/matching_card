@@ -16,7 +16,7 @@ class Card(Button):
         self.color = (0, 0, 0, 0)
 
         with self.canvas.before:
-            Color(0.2, 0.6, 0.9, 1)
+            Color(0.96, 0.87, 0.70, 1)
             self.round = RoundedRectangle(size=self.size, pos=self.pos, radius=[20])
         self.bind(pos=self.update_border, size=self.update_border)
 
