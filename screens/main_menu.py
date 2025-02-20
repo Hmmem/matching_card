@@ -36,10 +36,10 @@ class CustomButton(Button):
 
         with self.canvas.before:
             Color(0, 0.6, 1, 1)
-            self.rect = RoundedRectangle(size=self.size, pos=self.pos, radius=[20])
+            self.button = RoundedRectangle(size=self.size, pos=self.pos, radius=[20])
 
         self.bind(pos=self.update_rect, size=self.update_rect)
 
     def update_rect(self, *args):
-        self.rect.pos = self.pos
-        self.rect.size = self.size
+        self.button.pos = self.pos
+        self.button.size = self.size

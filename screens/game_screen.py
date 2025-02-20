@@ -1,5 +1,6 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.gridlayout import GridLayout
+from kivy.graphics import Color, Rectangle
 from components import Card, CardManager
 
 
@@ -18,3 +19,12 @@ class Gamescreen(Screen):
             card = Card(symbol="A")
             grid.add_widget(card)
         self.add_widget(grid)
+
+        with self.canvas.before:
+            Color(0.92, 0.9, 0.76, 1)
+            self.bg_color = Rectangle(pos=self.pos, size=self.size)
+        self.bind(pos=self.update_bg, size=self.update_bg)
+
+    def update_bg(self, *args):
+        self.bg_color.pos = self.pos
+        self.bg_color.size = self.size
