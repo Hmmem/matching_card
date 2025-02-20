@@ -12,6 +12,14 @@ class Card(Button):
         self.setup_facedown()
 
     def setup_facedown(self):
-        self.background_normal = ""
-        self.background_color = (0.2, 0.6, 0.9, 1)
+        self.background_color = (0, 0, 0, 0)
         self.color = (0, 0, 0, 0)
+
+        with self.canvas.before:
+            Color(0.2, 0.6, 0.9, 1)
+            self.round = RoundedRectangle(size=self.size, pos=self.pos, radius=[20])
+        self.bind(pos=self.update_border, size=self.update_border)
+
+    def update_border(self, *args):
+        self.round.pos = self.pos
+        self.round.size = self.size
