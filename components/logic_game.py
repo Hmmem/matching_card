@@ -1,6 +1,7 @@
 import random
 from kivy.clock import Clock
 from .cards import Card
+from kivy.animation import Animation
 
 
 class CardManager:
@@ -30,14 +31,21 @@ class CardManager:
         self.selected_cards.append(card)
 
         if len(self.selected_cards) == 2:
-            Clock.schedule_once(self._compare_cards, 1)
+            Clock.schedule_once(self.compare_cards, 1)
 
-    def _compare_cards(self, dt):
+    def compare_cards(self, dt):
         c1, c2 = self.selected_cards
         if c1.symbol == c2.symbol:
             c1.is_matched = c2.is_matched = True
-            self._animate_match(c1, c2)
+            self.match_animate(c1, c2)
         else:
             for c in [c1, c2]:
                 c.flip()
         self.selected_cards.clear()
+
+    def match_animate(self, *cards):
+        ani = Animation(background_color=(0, 1, 0, 1), duration=0.5) + Animation(
+            background_color=(1, 1, 1, 1), duration=0.5
+        )
+        for card in cards:
+            ani.start(card)
