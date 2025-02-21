@@ -1,3 +1,8 @@
+import random
+from kivy.clock import Clock
+from .cards import Card
+
+
 class CardManager:
     def __init__(self, grid_layout):
         self.grid = grid_layout
@@ -16,3 +21,7 @@ class CardManager:
             card.bind(on_release=lambda c=card: self.check_match(c))
             self.cards.append(card)
             self.grid.add_widget(card)
+
+    def check_match(self, card):
+        if card.is_matched or card in self.selected_cards:
+            return
