@@ -25,3 +25,6 @@ class CardManager:
     def check_match(self, card):
         if card.is_matched or card in self.selected_cards:
             return
+
+        card.flip()
+        self.selected_cards.append(card)
