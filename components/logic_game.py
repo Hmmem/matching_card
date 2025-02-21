@@ -28,3 +28,14 @@ class CardManager:
 
         card.flip()
         self.selected_cards.append(card)
+
+        if len(self.selected_cards) == 2:
+            Clock.schedule_once(self._compare_cards, 1)
+
+    def _compare_cards(self, dt):
+        c1, c2 = self.selected_cards
+        if c1.symbol != c2.symbol:
+            for c in [c1, c2]:
+                c.flip()
+
+        self.selected_cards.clear()
