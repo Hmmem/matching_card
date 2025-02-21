@@ -34,8 +34,10 @@ class CardManager:
 
     def _compare_cards(self, dt):
         c1, c2 = self.selected_cards
-        if c1.symbol != c2.symbol:
+        if c1.symbol == c2.symbol:
+            c1.is_matched = c2.is_matched = True
+            self._animate_match(c1, c2)
+        else:
             for c in [c1, c2]:
                 c.flip()
-
         self.selected_cards.clear()
