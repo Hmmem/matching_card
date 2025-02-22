@@ -3,6 +3,7 @@ from kivy.clock import Clock
 from .cards import Card
 from kivy.animation import Animation
 
+
 class CardManager:
     def __init__(self, grid_layout):
         self.grid = grid_layout
@@ -53,6 +54,9 @@ class CardManager:
         self.selected_cards.clear()
 
     def match_animate(self, *cards):
-        ani = Animation(background_color=(0, 1, 0, 1), duration=0.5) + Animation(background_color=(1, 1, 1, 1), duration=0.5)
         for card in cards:
+            ani = Animation(size=(0, 0), duration=0.3)
+            ani.bind(on_complete=lambda anim, widget: self.grid.remove_widget(widget))
             ani.start(card)
+
+            card.disabled = True

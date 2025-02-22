@@ -2,15 +2,37 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
 
+
 class DifficultyScreen(Screen):
     def __init__(self, **params):
         super().__init__(**params)
         layout = FloatLayout()
 
-        title = Button(text="Choose Difficulty", size_hint=(None, None), size=(250, 70), pos_hint={"center_x": 0.5, "center_y": 0.7}, background_color=(0, 0, 0, 0))
-        easy_button = Button(text="Easy", size_hint=(None, None), size=(150, 60), pos_hint={"center_x": 0.3, "center_y": 0.5})
-        medium_button = Button(text="Medium", size_hint=(None, None), size=(150, 60), pos_hint={"center_x": 0.5, "center_y": 0.5})
-        hard_button = Button(text="Hard", size_hint=(None, None), size=(150, 60), pos_hint={"center_x": 0.7, "center_y": 0.5})
+        title = Button(
+            text="Choose Difficulty",
+            size_hint=(None, None),
+            size=(250, 70),
+            pos_hint={"center_x": 0.5, "center_y": 0.7},
+            background_color=(0, 0, 0, 0),
+        )
+        easy_button = Button(
+            text="Easy",
+            size_hint=(None, None),
+            size=(150, 60),
+            pos_hint={"center_x": 0.3, "center_y": 0.5},
+        )
+        medium_button = Button(
+            text="Medium",
+            size_hint=(None, None),
+            size=(150, 60),
+            pos_hint={"center_x": 0.5, "center_y": 0.5},
+        )
+        hard_button = Button(
+            text="Hard",
+            size_hint=(None, None),
+            size=(150, 60),
+            pos_hint={"center_x": 0.7, "center_y": 0.5},
+        )
 
         easy_button.bind(on_press=lambda instance: self.switch_to_game("Easy"))
         medium_button.bind(on_press=lambda instance: self.switch_to_game("Medium"))

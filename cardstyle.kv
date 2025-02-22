@@ -2,14 +2,22 @@
     size_hint: (None, None)
     size: (100, 150)
     background_normal: ''
-    background_color: (0.286, 0.239, 0.62 ) if not self.is_face_up else (1, 0.95, 0.686)
+    background_color: (0, 0, 0, 0)
     color: (0, 0, 0, 0) if not self.is_face_up else (0, 0, 0, 1)
     text: self.symbol if self.is_face_up else ''
     
     canvas.before:
         Color:
-            rgba: (1, 1, 1, 0.3) if self.is_face_up else (0.2, 0.6, 0.9, 1)
+            rgba: (1, 0.95, 0.686, 1) if self.is_face_up else (0.286, 0.239, 0.62, 1)
         RoundedRectangle:
             size: self.size
             pos: self.pos
             radius: [20] 
+
+    canvas.after:   
+        Color:
+            rgba: (1, 1, 1, 1)  
+        Line:
+            rounded_rectangle: [self.x, self.y, self.width, self.height, 15]
+            width: 1.5
+    
