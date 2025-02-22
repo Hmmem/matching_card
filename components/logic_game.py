@@ -9,7 +9,8 @@ class CardManager:
         self.grid = grid_layout
         self.cards = []
         self.selected_cards = []
-        self.pairs = 8  # ค่าเริ่มต้น
+        self.pairs = 8
+        self.is_processing = False
         self.create_board()
 
     def set_difficulty(self, difficulty):
@@ -34,14 +35,20 @@ class CardManager:
             self.grid.add_widget(card)
 
     def check_match(self, card):
-        if card.is_matched or card in self.selected_cards:
+        if (
+            card.is_matched
+            or card in self.selected_cards
+            or self.is_processing
+            or len(self.selected_cards) >= 2
+        ):
             return
 
         card.flip()
         self.selected_cards.append(card)
 
         if len(self.selected_cards) == 2:
-            Clock.schedule_once(self.compare_cards, 1)
+            self.is_processing = True
+            Clock.schedule_once(self.compare_cards, 0.7)
 
     def compare_cards(self, dt):
         c1, c2 = self.selected_cards
@@ -52,6 +59,7 @@ class CardManager:
             for c in [c1, c2]:
                 c.flip()
         self.selected_cards.clear()
+        self.is_processing = False
 
     def match_animate(self, *cards):
         for card in cards:
