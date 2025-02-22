@@ -55,8 +55,6 @@ class CardManager:
 
     def match_animate(self, *cards):
         for card in cards:
-            ani = Animation(size=(0, 0), duration=0.3)
-            ani.bind(on_complete=lambda anim, widget: self.grid.remove_widget(widget))
-            ani.start(card)
-
+            Animation(opacity=0, duration=0.3).start(card)
             card.disabled = True
+            card.is_matched = True
