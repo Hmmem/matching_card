@@ -3,13 +3,21 @@ from kivy.clock import Clock
 from .cards import Card
 from kivy.animation import Animation
 
-
 class CardManager:
     def __init__(self, grid_layout):
         self.grid = grid_layout
         self.cards = []
         self.selected_cards = []
-        self.pairs = 8
+        self.pairs = 8  # ค่าเริ่มต้น
+        self.create_board()
+
+    def set_difficulty(self, difficulty):
+        if difficulty == "Easy":
+            self.pairs = 4
+        elif difficulty == "Medium":
+            self.pairs = 8
+        elif difficulty == "Hard":
+            self.pairs = 12
         self.create_board()
 
     def create_board(self):
@@ -17,6 +25,7 @@ class CardManager:
         random.shuffle(symbols)
 
         self.grid.clear_widgets()
+        self.cards = []
         for symbol in symbols:
             card = Card(symbol=symbol, size_hint=(None, None), size=(100, 150))
             card.bind(on_release=lambda c=card: self.check_match(c))
@@ -44,8 +53,6 @@ class CardManager:
         self.selected_cards.clear()
 
     def match_animate(self, *cards):
-        ani = Animation(background_color=(0, 1, 0, 1), duration=0.5) + Animation(
-            background_color=(1, 1, 1, 1), duration=0.5
-        )
+        ani = Animation(background_color=(0, 1, 0, 1), duration=0.5) + Animation(background_color=(1, 1, 1, 1), duration=0.5)
         for card in cards:
             ani.start(card)
