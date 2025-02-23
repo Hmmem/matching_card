@@ -2,6 +2,7 @@ import random
 from kivy.clock import Clock
 from .cards import Card
 from kivy.animation import Animation
+from kivy.uix.label import Label
 
 
 class CardManager:
@@ -12,6 +13,33 @@ class CardManager:
         self.pairs = 8
         self.is_processing = False
         self.create_board()
+
+    def check_game_status(self):
+        """เช็คว่าเกมจบหรือยัง"""
+        if all(card.is_matched for card in self.cards):
+            self.show_game_end_message("You Win!")  # แสดงข้อความชนะ
+            Clock.schedule_once(lambda dt: self.reset_game(), 2)  # กลับเมนูหลัง 2 วิ
+
+    def reset_game(self):
+        """รีเซ็ตเกมและกลับไปที่เมนูหลัก"""
+        self.grid.clear_widgets()
+        self.cards = []
+        self.selected_cards = []
+        self.is_processing = False
+        self.grid.parent.manager.current = "Main"  # กลับไปเมนูหลัก
+
+    def compare_cards(self, dt):
+        c1, c2 = self.selected_cards
+        if c1.symbol == c2.symbol:
+            c1.is_matched = c2.is_matched = True
+            self.match_animate(c1, c2)
+        else:
+            for c in [c1, c2]:
+                c.flip()
+        self.selected_cards.clear()
+        self.is_processing = False
+
+        self.check_game_status()  # เช็คว่าชนะหรือยัง
 
     def set_difficulty(self, difficulty):
         if difficulty == "Easy":
