@@ -14,46 +14,7 @@ class CardManager:
         self.is_processing = False
         self.create_board()
 
-    def check_game_status(self):
-        """เช็คว่าเกมจบหรือยัง"""
-        if all(card.is_matched for card in self.cards):
-            self.show_game_end_message("You Win!")  # แสดงข้อความชนะ
-            Clock.schedule_once(lambda dt: self.reset_game(), 2)  # กลับเมนูหลัง 2 วิ
-
-    def reset_game(self):
-        """รีเซ็ตเกมและกลับไปที่เมนูหลัก"""
-        self.grid.clear_widgets()
-        self.cards = []
-        self.selected_cards = []
-        self.is_processing = False
-        self.grid.parent.manager.current = "Main"  # กลับไปเมนูหลัก
-
-    def compare_cards(self, dt):
-        c1, c2 = self.selected_cards
-        if c1.symbol == c2.symbol:
-            c1.is_matched = c2.is_matched = True
-            self.match_animate(c1, c2)
-        else:
-            for c in [c1, c2]:
-                c.flip()
-        self.selected_cards.clear()
-        self.is_processing = False
-
-        self.check_game_status()  # เช็คว่าชนะหรือยัง
-
-    def show_game_end_message(self, message):
-        """แสดงข้อความว่าเกมจบแล้ว"""
-        label = Label(text=message, font_size=24, pos_hint={"center_x": 0.5, "center_y": 0.5})
-        self.grid.add_widget(label)
-
-    def set_difficulty(self, difficulty):
-        if difficulty == "Easy":
-            self.pairs = 4
-        elif difficulty == "Medium":
-            self.pairs = 8
-        elif difficulty == "Hard":
-            self.pairs = 12
-        self.create_board()
+    
 
     def create_board(self):
         symbols = [chr(65 + i) for i in range(self.pairs)] * 2
@@ -99,3 +60,54 @@ class CardManager:
             Animation(opacity=0, duration=0.3).start(card)
             card.disabled = True
             card.is_matched = True
+
+    def check_game_status(self):
+        """เช็คว่าเกมจบหรือยัง"""
+        print("check_game_status() ถูกเรียก")
+        if all(card.is_matched for card in self.cards):
+            print("Game Over: You Win!")  # Debugging ตรวจสอบว่าเกมจบแล้วจริง
+            Clock.schedule_once(lambda dt: self.reset_game(), 2)  # กลับเมนูหลัง 2 วิ
+
+    def reset_game(self):
+        """รีเซ็ตเกมและกลับไปที่เมนูหลัก"""
+        print("Returning to main menu...")  # Debugging
+        self.grid.clear_widgets()
+        self.cards = []
+        self.selected_cards = []
+        self.is_processing = False
+
+        # ตรวจสอบว่ามี parent หรือไม่
+        if self.grid.parent and self.grid.parent.manager:
+            self.grid.parent.manager.current = "Main"
+        else:
+            print("Error: Cannot switch to Main menu. Manager not found.")
+
+    def compare_cards(self, dt):
+        print("compare_cards() ถูกเรียก")
+        c1, c2 = self.selected_cards
+        if c1.symbol == c2.symbol:
+            c1.is_matched = c2.is_matched = True
+            self.match_animate(c1, c2)
+        else:
+            for c in [c1, c2]:
+                c.flip()
+        self.selected_cards.clear()
+        self.is_processing = False
+
+        self.check_game_status()  # เช็คว่าชนะหรือยัง
+        print("Checking game status...")  # ✅ Debug ตรวจสอบว่าเรียกใช้ฟังก์ชันหรือไม่
+        self.check_game_status()
+
+    def show_game_end_message(self, message):
+        """แสดงข้อความว่าเกมจบแล้ว"""
+        label = Label(text=message, font_size=24, pos_hint={"center_x": 0.5, "center_y": 0.5})
+        self.grid.add_widget(label)
+
+    def set_difficulty(self, difficulty):
+        if difficulty == "Easy":
+            self.pairs = 4
+        elif difficulty == "Medium":
+            self.pairs = 8
+        elif difficulty == "Hard":
+            self.pairs = 12
+        self.create_board()
