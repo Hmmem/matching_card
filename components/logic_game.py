@@ -41,6 +41,11 @@ class CardManager:
 
         self.check_game_status()  # เช็คว่าชนะหรือยัง
 
+    def show_game_end_message(self, message):
+        """แสดงข้อความว่าเกมจบแล้ว"""
+        label = Label(text=message, font_size=24, pos_hint={"center_x": 0.5, "center_y": 0.5})
+        self.grid.add_widget(label)
+
     def set_difficulty(self, difficulty):
         if difficulty == "Easy":
             self.pairs = 4
