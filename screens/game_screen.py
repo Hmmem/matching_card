@@ -4,6 +4,8 @@ from kivy.lang import Builder
 from components import CardManager
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
+from kivy.clock import Clock
+from kivy.uix.label import Label
 
 Builder.load_file("gamesceenstyle.kv")
 
@@ -37,7 +39,8 @@ class Gamescreen(Screen):
 
     def go_to_menu(self, instance):
         self.manager.current = "main_menu"  # เปลี่ยนกลับไปที่เมนูหลัก
-
+        self.stop_timer()
+        
     def start_timer(self):
         """ เริ่มจับเวลา """
         self.time_elapsed = 0
@@ -56,6 +59,7 @@ class Gamescreen(Screen):
 
     def set_difficulty(self, difficulty):
         self.card_manager.set_difficulty(difficulty)
+        self.start_timer()
 
         if difficulty == "Easy" :
             self.grid.cols = 2
@@ -70,3 +74,5 @@ class Gamescreen(Screen):
         total_height = (self.card_manager.pairs // self.grid.cols) * card_height + ((self.card_manager.pairs // self.grid.cols) - 1) * 10
 
         self.grid.size = (total_width, total_height)  # ปรับขนาด Grid
+
+        
