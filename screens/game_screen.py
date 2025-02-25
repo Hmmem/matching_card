@@ -67,6 +67,13 @@ class Gamescreen(Screen):
             Clock.unschedule(self.timer_event)
             self.timer_event = None
 
+        if self.best_time is None or self.time_elapsed < self.best_time:
+            self.best_time = self.time_elapsed  # อัปเดตค่าที่ดีที่สุด
+            minutes = (self.best_time // 600)
+            seconds = (self.best_time // 10) % 60
+            milliseconds = self.best_time % 10
+            self.best_time_label.text = f"Best Time: {minutes:02}:{seconds:02}.{milliseconds}"  
+
     def set_difficulty(self, difficulty):
         self.card_manager.set_difficulty(difficulty)
         self.start_timer()
