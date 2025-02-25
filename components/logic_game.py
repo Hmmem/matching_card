@@ -78,7 +78,7 @@ class CardManager:
 
         # ตรวจสอบว่ามี parent หรือไม่
         if self.grid.parent and self.grid.parent.manager:
-            self.grid.parent.manager.current = "Main"
+            self.grid.parent.manager.current = "main_menu"
         else:
             print("Error: Cannot switch to Main menu. Manager not found.")
 
