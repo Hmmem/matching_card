@@ -16,8 +16,13 @@ class Gamescreen(Screen):
         
         # เพิ่ม Label แสดงเวลา
         self.time_elapsed = 0
+        self.best_time = None
+
         self.timer_label = Label(text="Time: 00:00.0", size_hint=(1, None), height=50, font_size=24)
+        self.best_time_label = Label(text="Best Time: --:--.--", size_hint=(1, None), height=50, font_size=24)
+        
         main_layout.add_widget(self.timer_label)
+        main_layout.add_widget(self.best_time_label)
 
          # เรียกใช้งานจับเวลา
         self.timer_event = None
