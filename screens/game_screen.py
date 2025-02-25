@@ -16,7 +16,7 @@ class Gamescreen(Screen):
         
         # เพิ่ม Label แสดงเวลา
         self.time_elapsed = 0
-        self.timer_label = Label(text="Time: 0 sec", size_hint=(1, None), height=50, font_size=24)
+        self.timer_label = Label(text="Time: 00:00.0", size_hint=(1, None), height=50, font_size=24)
         main_layout.add_widget(self.timer_label)
 
          # เรียกใช้งานจับเวลา
@@ -44,12 +44,17 @@ class Gamescreen(Screen):
     def start_timer(self):
         """ เริ่มจับเวลา """
         self.time_elapsed = 0
-        self.timer_event = Clock.schedule_interval(self.update_timer, 1)
+        self.timer_event = Clock.schedule_interval(self.update_timer, 0.1)
 
     def update_timer(self, dt):
-        """ อัปเดตเวลาใน Label ทุกวินาที """
-        self.time_elapsed += 1
-        self.timer_label.text = f"Time: {self.time_elapsed} sec"
+        """ อัปเดตเวลาใน Label ทุก 0.1 วินาที """
+        self.time_elapsed += 1  # นับเป็นหน่วยของ 0.1 วินาที
+
+        minutes = (self.time_elapsed // 600)  # 1 นาที = 600 หน่วย (0.1 * 600 = 60 วินาที)
+        seconds = (self.time_elapsed // 10) % 60  # 1 วินาที = 10 หน่วย
+        milliseconds = self.time_elapsed % 10  # เสี้ยววินาที (0.1 วินาที)
+
+        self.timer_label.text = f"Time: {minutes:02}:{seconds:02}.{milliseconds}"
 
     def stop_timer(self):
         """ หยุดจับเวลาเมื่อจบเกม """
