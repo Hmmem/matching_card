@@ -16,7 +16,7 @@ class Gamescreen(Screen):
         
         # เพิ่ม Label แสดงเวลา
         self.time_elapsed = 0
-        self.timer_label = Label(text="Time: 0 sec", size_hint=(None, None), size=(200, 50))
+        self.timer_label = Label(text="Time: 0 sec", size_hint=(1, None), height=50, font_size=24)
         main_layout.add_widget(self.timer_label)
 
          # เรียกใช้งานจับเวลา
