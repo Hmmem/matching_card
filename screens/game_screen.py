@@ -27,9 +27,9 @@ class Gamescreen(Screen):
         top_layout.add_widget(self.best_time_label)
         main_layout.add_widget(top_layout)
 
-        middle_layout = AnchorLayout(size_hint=(1, 1))
-        self.grid = GridLayout(spacing=10, size_hint=(0.5, 1))
-
+        middle_layout = AnchorLayout()
+        self.grid = GridLayout(spacing=10, size_hint=(None, 1))
+        self.grid.bind(minimum_width=self.grid.setter("width"))
         middle_layout.add_widget(self.grid)
         main_layout.add_widget(middle_layout)
 
@@ -94,5 +94,3 @@ class Gamescreen(Screen):
             self.grid.cols = 4
         elif difficulty == "Hard":
             self.grid.cols = 6
-
-        # Clock.schedule_once(lambda dt: self.card_manager.adjust_card_sizes(), 0.1)
