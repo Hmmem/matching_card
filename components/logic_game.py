@@ -14,8 +14,6 @@ class CardManager:
         self.is_processing = False
         self.create_board()
 
-    
-
     def create_board(self):
         symbols = [chr(65 + i) for i in range(self.pairs)] * 2
         random.shuffle(symbols)
@@ -45,6 +43,7 @@ class CardManager:
             Clock.schedule_once(self.compare_cards, 0.7)
 
     def compare_cards(self, dt):
+        print("CmpareCarde")
         c1, c2 = self.selected_cards
         if c1.symbol == c2.symbol:
             c1.is_matched = c2.is_matched = True
@@ -54,6 +53,10 @@ class CardManager:
                 c.flip()
         self.selected_cards.clear()
         self.is_processing = False
+
+        self.check_game_status()
+        print("Checking game status...")
+        self.check_game_status()
 
     def match_animate(self, *cards):
         for card in cards:
@@ -82,25 +85,11 @@ class CardManager:
         else:
             print("Error: Cannot switch to Main menu. Manager not found.")
 
-    def compare_cards(self, dt):
-        print("compare_cards() ถูกเรียก")
-        c1, c2 = self.selected_cards
-        if c1.symbol == c2.symbol:
-            c1.is_matched = c2.is_matched = True
-            self.match_animate(c1, c2)
-        else:
-            for c in [c1, c2]:
-                c.flip()
-        self.selected_cards.clear()
-        self.is_processing = False
-
-        self.check_game_status()  # เช็คว่าชนะหรือยัง
-        print("Checking game status...")  # ✅ Debug ตรวจสอบว่าเรียกใช้ฟังก์ชันหรือไม่
-        self.check_game_status()
-
     def show_game_end_message(self, message):
         """แสดงข้อความว่าเกมจบแล้ว"""
-        label = Label(text=message, font_size=24, pos_hint={"center_x": 0.5, "center_y": 0.5})
+        label = Label(
+            text=message, font_size=24, pos_hint={"center_x": 0.5, "center_y": 0.5}
+        )
         self.grid.add_widget(label)
 
     def set_difficulty(self, difficulty):
