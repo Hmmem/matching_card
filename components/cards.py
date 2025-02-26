@@ -17,6 +17,7 @@ class Card(Button):
 
     def flip(self):
         original_width = self.width
+        self.minimum_width = original_width
         ani = Animation(width=0, duration=0.15) + Animation(
             width=original_width, duration=0.15
         )

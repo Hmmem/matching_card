@@ -21,7 +21,7 @@ class CardManager:
         self.grid.clear_widgets()
         self.cards = []
         for symbol in symbols:
-            card = Card(symbol=symbol, size_hint=(None, None), size=(100, 150))
+            card = Card(symbol=symbol, size_hint=(None, None))
             card.bind(on_release=lambda c=card: self.check_match(c))
             self.cards.append(card)
             self.grid.add_widget(card)
@@ -43,7 +43,7 @@ class CardManager:
             Clock.schedule_once(self.compare_cards, 0.7)
 
     def compare_cards(self, dt):
-        print("CmpareCarde")
+        print("CompareCarde")
         c1, c2 = self.selected_cards
         if c1.symbol == c2.symbol:
             c1.is_matched = c2.is_matched = True
@@ -94,7 +94,7 @@ class CardManager:
 
     def set_difficulty(self, difficulty):
         if difficulty == "Easy":
-            self.pairs = 4
+            self.pairs = 5
         elif difficulty == "Medium":
             self.pairs = 8
         elif difficulty == "Hard":

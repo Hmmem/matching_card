@@ -1,9 +1,9 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.gridlayout import GridLayout
-
 from components import CardManager
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.anchorlayout import AnchorLayout
 from kivy.clock import Clock
 from kivy.uix.label import Label
 
@@ -11,45 +11,44 @@ from kivy.uix.label import Label
 class Gamescreen(Screen):
     def __init__(self, **params):
         super().__init__(**params)
-        main_layout = BoxLayout(orientation="vertical", padding=10, spacing=10)
-
-        # เพิ่ม Label แสดงเวลา
-        self.time_elapsed = 0
-        self.best_time = None
-
-        self.timer_label = Label(
-            text="Time: 00:00.0", size_hint=(1, None), height=50, font_size=24
-        )
-        self.best_time_label = Label(
-            text="Best Time: --:--.--", size_hint=(1, None), height=50, font_size=24
-        )
-
-        main_layout.add_widget(self.timer_label)
-        main_layout.add_widget(self.best_time_label)
-
-        # เรียกใช้งานจับเวลา
-        self.timer_event = None
-
-        self.grid = GridLayout(
-            cols=4,
+        main_layout = BoxLayout(
+            orientation="vertical",
+            padding=10,
             spacing=10,
-            padding=20,
-            size_hint=(None, None),
-            pos_hint={"center_x": 0.5, "center_y": 0.65},
         )
-        self.card_manager = CardManager(self.grid)
-        self.add_widget(self.grid)
 
+        top_layout = BoxLayout(size_hint_y=None, height=100, spacing=20)
+        self.timer_label = Label(text="Time: 00:00.0", font_size=24, halign="center")
+        self.best_time_label = Label(
+            text="Best Time: --:--.--", font_size=24, halign="center"
+        )
+
+        top_layout.add_widget(self.timer_label)
+        top_layout.add_widget(self.best_time_label)
+        main_layout.add_widget(top_layout)
+
+        middle_layout = AnchorLayout(size_hint=(1, 1))
+        self.grid = GridLayout(spacing=10, size_hint=(0.5, 1))
+
+        middle_layout.add_widget(self.grid)
+        main_layout.add_widget(middle_layout)
+
+        bottom_layout = AnchorLayout(size_hint_y=None, height=50)
         back_button = Button(
             text="Back to Menu",
             size_hint=(None, None),
             size=(200, 50),
-            pos_hint={"center_x": 0.5},
         )
+
         back_button.bind(on_release=self.go_to_menu)
-        main_layout.add_widget(back_button)
+        bottom_layout.add_widget(back_button)
+        main_layout.add_widget(bottom_layout)
 
         self.add_widget(main_layout)
+        self.card_manager = CardManager(self.grid)
+        self.timer_event = None
+        self.time_elapsed = 0
+        self.best_time = None
 
     def go_to_menu(self, instance):
         self.manager.current = "main_menu"  # เปลี่ยนกลับไปที่เมนูหลัก
@@ -96,13 +95,4 @@ class Gamescreen(Screen):
         elif difficulty == "Hard":
             self.grid.cols = 6
 
-        # คำนวณขนาด Grid ตามจำนวนการ์ด
-        card_width, card_height = 100, 150  # ขนาดการ์ดแต่ละใบ
-        total_width = (
-            self.grid.cols * card_width + (self.grid.cols - 1) * 10
-        )  # รวม spacing
-        total_height = (self.card_manager.pairs // self.grid.cols) * card_height + (
-            (self.card_manager.pairs // self.grid.cols) - 1
-        ) * 10
-
-        self.grid.size = (total_width, total_height)  # ปรับขนาด Grid
+        # Clock.schedule_once(lambda dt: self.card_manager.adjust_card_sizes(), 0.1)
