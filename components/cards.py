@@ -1,9 +1,6 @@
 from kivy.uix.button import Button
 from kivy.animation import Animation
-from kivy.lang import Builder
 from kivy.properties import BooleanProperty
-
-Builder.load_file("cardstyle.kv")
 
 
 class Card(Button):

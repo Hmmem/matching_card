@@ -6,3 +6,47 @@
         Rectangle:
             pos: self.pos
             size: self.size
+
+<Mainmenuscreen>: 
+
+    canvas.before:
+        Color:
+            rgb:  0.855, 0.823, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    FloatLayout:
+        Button:
+            text: "Start Game"
+            size_hint: None, None
+            size: 200, 70
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            background_normal: ""
+            background_color: (0, 0, 0, 0)
+            radius: 20 
+            on_press: root.go_to_difficulty(self)
+
+            canvas.before:
+                Color:
+                    rgba: (0.286, 0.239, 0.62, 1) 
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [20] 
+
+            canvas.after:   
+                Color:
+                    rgba: (1, 1, 1, 1)  
+                Line:
+                    rounded_rectangle: [self.x, self.y, self.width, self.height, 15]
+                    width: 1.5
+
+<DifficultyScreen> :
+
+    canvas.before:
+        Color:
+            rgb:  0.855, 0.823, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
