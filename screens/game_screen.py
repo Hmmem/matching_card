@@ -45,7 +45,7 @@ class Gamescreen(Screen):
         main_layout.add_widget(bottom_layout)
 
         self.add_widget(main_layout)
-        self.card_manager = CardManager(self.grid)
+        self.card_manager = CardManager(self.grid, self)
         self.timer_event = None
         self.time_elapsed = 0
         self.best_time = None

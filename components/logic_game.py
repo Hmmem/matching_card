@@ -6,8 +6,9 @@ from kivy.uix.label import Label
 
 
 class CardManager:
-    def __init__(self, grid_layout):
-        self.grid = grid_layout
+    def __init__(self, grid, gamescreen):
+        self.grid = grid
+        self.gamescreen = gamescreen
         self.cards = []
         self.selected_cards = []
         self.pairs = 8
@@ -80,8 +81,8 @@ class CardManager:
         self.is_processing = False
 
         # ตรวจสอบว่ามี parent หรือไม่
-        if self.grid.parent and self.grid.parent.manager:
-            self.grid.parent.manager.current = "main_menu"
+        if self.gamescreen.manager:
+            self.gamescreen.manager.current = "main_menu"
         else:
             print("Error: Cannot switch to Main menu. Manager not found.")
 
