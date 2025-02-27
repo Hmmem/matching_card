@@ -66,10 +66,12 @@ class CardManager:
             card.is_matched = True
 
     def check_game_status(self):
-        """เช็คว่าเกมจบหรือยัง"""
         print("check_game_status() ถูกเรียก")
         if all(card.is_matched for card in self.cards):
-            print("Game Over: You Win!")  # Debugging ตรวจสอบว่าเกมจบแล้วจริง
+            print("Game Over: You Win!")
+            self.gamescreen.stop_timer(
+                game_completed=True
+            )  # Debugging ตรวจสอบว่าเกมจบแล้วจริง
             Clock.schedule_once(lambda dt: self.reset_game(), 2)  # กลับเมนูหลัง 2 วิ
 
     def reset_game(self):
