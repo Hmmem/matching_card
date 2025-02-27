@@ -33,15 +33,27 @@ class Gamescreen(Screen):
         middle_layout.add_widget(self.grid)
         main_layout.add_widget(middle_layout)
 
-        bottom_layout = AnchorLayout(size_hint_y=None, height=50)
+        bottom_layout = BoxLayout(
+            size_hint_y=None,
+            height=50,
+            orientation="horizontal",
+            spacing=20,
+        )
         back_button = Button(
             text="Back to Menu",
             size_hint=(None, None),
             size=(200, 50),
         )
+        stop_button = Button(
+            text="Stop Game",
+            size_hint=(None, None),
+            size=(200, 50),
+        )
 
         back_button.bind(on_release=self.go_to_menu)
+        stop_button.bind(on_release=self.stop_game)
         bottom_layout.add_widget(back_button)
+        bottom_layout.add_widget(stop_button)
         main_layout.add_widget(bottom_layout)
 
         self.add_widget(main_layout)
@@ -52,7 +64,7 @@ class Gamescreen(Screen):
 
     def go_to_menu(self, instance):
         self.manager.current = "main_menu"  # เปลี่ยนกลับไปที่เมนูหลัก
-        self.stop_timer()
+        self.stop_timer(game_completed=False)
 
     def start_timer(self):
         """เริ่มจับเวลา"""
@@ -69,20 +81,21 @@ class Gamescreen(Screen):
 
         self.timer_label.text = f"Time: {minutes:02}:{seconds:02}.{milliseconds}"
 
-    def stop_timer(self):
+    def stop_timer(self, game_completed=False):
         """หยุดจับเวลาเมื่อจบเกม"""
         if self.timer_event:
             Clock.unschedule(self.timer_event)
             self.timer_event = None
 
-        if self.best_time is None or self.time_elapsed < self.best_time:
-            self.best_time = self.time_elapsed  # อัปเดตค่าที่ดีที่สุด
-            minutes = self.best_time // 600
-            seconds = (self.best_time // 10) % 60
-            milliseconds = self.best_time % 10
-            self.best_time_label.text = (
-                f"Best Time: {minutes:02}:{seconds:02}.{milliseconds}"
-            )
+        if game_completed:
+            if self.best_time is None or self.time_elapsed < self.best_time:
+                self.best_time = self.time_elapsed  # อัปเดตค่าที่ดีที่สุด
+                minutes = self.best_time // 600
+                seconds = (self.best_time // 10) % 60
+                milliseconds = self.best_time % 10
+                self.best_time_label.text = (
+                    f"Best Time: {minutes:02}:{seconds:02}.{milliseconds}"
+                )
 
     def set_difficulty(self, difficulty):
         self.card_manager.set_difficulty(difficulty)
