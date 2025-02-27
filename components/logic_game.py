@@ -95,7 +95,7 @@ class CardManager:
 
     def set_difficulty(self, difficulty):
         if difficulty == "Easy":
-            self.pairs = 5
+            self.pairs = 6
         elif difficulty == "Medium":
             self.pairs = 8
         elif difficulty == "Hard":

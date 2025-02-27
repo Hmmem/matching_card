@@ -89,7 +89,7 @@ class Gamescreen(Screen):
         self.start_timer()
 
         if difficulty == "Easy":
-            self.grid.cols = 2
+            self.grid.cols = 3
         elif difficulty == "Medium":
             self.grid.cols = 4
         elif difficulty == "Hard":
