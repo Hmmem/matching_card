@@ -81,6 +81,9 @@ class Gamescreen(Screen):
 
         self.timer_label.text = f"Time: {minutes:02}:{seconds:02}.{milliseconds}"
 
+    def stop_game(self, instance):
+        self.stop_timer(game_completed=False)
+
     def stop_timer(self, game_completed=False):
         """หยุดจับเวลาเมื่อจบเกม"""
         if self.timer_event:
