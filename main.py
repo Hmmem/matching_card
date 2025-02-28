@@ -3,6 +3,7 @@ from kivy.uix.screenmanager import ScreenManager
 from screens import Mainmenuscreen, Gamescreen
 from screens.difficulty_screen import DifficultyScreen
 from kivy.lang import Builder
+from kivy.core.audio import SoundLoader
 
 Builder.load_file("gamesceenstyle.kv")
 Builder.load_file("cardstyle.kv")
@@ -17,11 +18,21 @@ class MyScreenManager(ScreenManager):
 
 class MyGame(App):
     def build(self):
+        self.background_music = SoundLoader.load("samurai-lofium-292016.mp3")
+        if self.background_music:
+            self.background_music.loop = True
+            self.background_music.volume = 0.5
+            self.background_music.play()
+
         SM = ScreenManager()
         SM.add_widget(Mainmenuscreen(name="main_menu"))
         SM.add_widget(DifficultyScreen(name="Difficulty"))
         SM.add_widget(Gamescreen(name="Game"))
         return SM
+
+    def on_stop(self):
+        if self.background_music:
+            self.background_music.stop()
 
 
 if __name__ == "__main__":
