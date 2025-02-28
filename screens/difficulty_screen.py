@@ -1,6 +1,7 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.label import Label
 
 
 class DifficultyScreen(Screen):
@@ -39,6 +40,7 @@ class DifficultyScreen(Screen):
         hard_button.bind(on_press=lambda instance: self.switch_to_game("Hard"))
 
         layout.add_widget(title)
+        self.layout.add_widget(self.best_time_label)
         layout.add_widget(easy_button)
         layout.add_widget(medium_button)
         layout.add_widget(hard_button)
@@ -48,3 +50,7 @@ class DifficultyScreen(Screen):
         """ส่งค่าความยากไปที่ Gamescreen แล้วเปลี่ยนหน้า"""
         self.manager.get_screen("Game").set_difficulty(difficulty)
         self.manager.current = "Game"
+
+    def update_best_time(self, best_time):
+        """อัปเดตค่า Best Time ที่ได้รับจาก Gamescreen"""
+        self.best_time_label.text = best_time
