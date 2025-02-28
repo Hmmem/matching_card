@@ -7,6 +7,14 @@ from kivy.uix.label import Label
 class DifficultyScreen(Screen):
     def __init__(self, **params):
         super().__init__(**params)
+        self.best_time_label = Label(  # ✅ สร้าง Label ก่อน Layout
+            text="Best Time: --:--.--",
+            size_hint=(None, None),
+            size=(200, 50),
+            pos_hint={"center_x": 0.5, "center_y": 0.6},
+            font_size=20,
+        )
+
         layout = FloatLayout()
 
         title = Button(
