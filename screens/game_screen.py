@@ -90,6 +90,8 @@ class Gamescreen(Screen):
             Clock.unschedule(self.timer_event)
             self.timer_event = None
 
+        best_time_text = self.best_time_label.text  
+
         if game_completed:
             if self.best_time is None or self.time_elapsed < self.best_time:
                 self.best_time = self.time_elapsed  # อัปเดตค่าที่ดีที่สุด
@@ -99,6 +101,9 @@ class Gamescreen(Screen):
                 self.best_time_label.text = (
                     f"Best Time: {minutes:02}:{seconds:02}.{milliseconds}"
                 )
+                self.best_time_label.text = best_time_text
+                difficulty_screen = self.manager.get_screen("Difficulty")
+                difficulty_screen.update_best_time(best_time_text)
 
     def set_difficulty(self, difficulty):
         self.card_manager.set_difficulty(difficulty)
