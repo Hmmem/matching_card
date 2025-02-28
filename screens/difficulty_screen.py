@@ -40,7 +40,7 @@ class DifficultyScreen(Screen):
         hard_button.bind(on_press=lambda instance: self.switch_to_game("Hard"))
 
         layout.add_widget(title)
-        self.layout.add_widget(self.best_time_label)
+        layout.add_widget(self.best_time_label)
         layout.add_widget(easy_button)
         layout.add_widget(medium_button)
         layout.add_widget(hard_button)
