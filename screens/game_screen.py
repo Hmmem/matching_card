@@ -95,25 +95,25 @@ class Gamescreen(Screen):
         if self.is_stopped:
             self.resume_game()  # เล่นต่อ
         else:
-            self.stop_game(None)  # หยุดเกม
+            self.stop_game()  # หยุดเกม
 
    
     def stop_game(self, *args):
-        """ หยุดเกมชั่วคราว """
+        """ หยุดเกมชั่วคราว โดยไม่ลบค่าจับเวลา """
         if self.timer_event:
-            self.timer_event.cancel()  # หยุดชั่วคราว แต่ไม่ลบตัวแปร
+            Clock.unschedule(self.update_timer)  # หยุดชั่วคราว แต่ไม่ลบค่า
+            self.timer_event = None  # ล้างตัวแปร event แต่ไม่รีเซ็ตเวลา
         self.is_stopped = True
         self.stop_button.text = "Resume"  # เปลี่ยนปุ่มเป็น "เล่นต่อ"
         self.game_active = False
 
     def resume_game(self):
         """ เล่นเกมต่อ """
-        if not self.timer_event:  # ตรวจสอบว่าก่อนหน้านี้หยุดไว้จริง
-            self.timer_event = Clock.schedule_interval(self.update_timer, 0.1)  
+        if self.timer_event is None:  # ตรวจสอบว่ากำลังหยุดอยู่จริง
+            self.timer_event = Clock.schedule_interval(self.update_timer, 0.1)  # เริ่มจับเวลาต่อ
         self.is_stopped = False
         self.stop_button.text = "Pause"  # เปลี่ยนปุ่มเป็น "หยุดเกม"
         self.game_active = True
-
     def stop_timer(self, game_completed=False):
         """หยุดจับเวลาเมื่อจบเกม"""
         if self.timer_event:
