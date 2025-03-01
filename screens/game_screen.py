@@ -29,13 +29,13 @@ class Gamescreen(Screen):
         top_layout.add_widget(self.timer_label)
         top_layout.add_widget(self.best_time_label)
         top_layout.add_widget(Widget(size_hint_x=1))
-        stop_button = Button(
+        self.stop_button = Button(
             text=" ||",
             size_hint=(None, None),
             size=(150, 40),
         )
-        stop_button.bind(on_release=self.stop_game)
-        top_layout.add_widget(stop_button)
+        self.stop_button.bind(on_release=self.toggle_stop_game)
+        top_layout.add_widget(self.stop_button)
 
         main_layout.add_widget(top_layout)
 
@@ -67,7 +67,8 @@ class Gamescreen(Screen):
         self.timer_event = None
         self.time_elapsed = 0
         self.best_time = None
-        self.game_active = False
+        self.game_active = True
+        self.is_stopped = False
 
     def go_to_menu(self, instance):
         self.manager.current = "main_menu"  # เปลี่ยนกลับไปที่เมนูหลัก
@@ -89,9 +90,27 @@ class Gamescreen(Screen):
 
         self.timer_label.text = f"Time: {minutes:02}:{seconds:02}.{milliseconds}"
 
+    def toggle_stop_game(self, instance):
+        """ กดปุ่มเพื่อสลับระหว่างหยุดเกมกับเล่นเกมต่อ """
+        if self.is_stopped:
+            self.resume_game()  # เล่นต่อ
+        else:
+            self.stop_game()  # หยุดเกม
+
+   
     def stop_game(self, instance):
+        """ หยุดเกมชั่วคราว """
+        self.is_stopped = True
+        self.stop_button.text = "Resume"  # เปลี่ยนปุ่มเป็น "เล่นต่อ"
         self.stop_timer(game_completed=False)
         self.game_active = False
+
+    def resume_game(self):
+        """ เล่นเกมต่อ """
+        self.is_paused = False
+        self.stop_button.text = "Pause"  # เปลี่ยนปุ่มเป็น "หยุดเกม"
+        self.start_timer()
+        self.game_active = True
 
     def stop_timer(self, game_completed=False):
         """หยุดจับเวลาเมื่อจบเกม"""
