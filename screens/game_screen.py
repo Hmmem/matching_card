@@ -6,19 +6,21 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.clock import Clock
 from kivy.uix.label import Label
+from kivy.uix.widget import Widget
 
 
 class Gamescreen(Screen):
     def __init__(self, **params):
         super().__init__(**params)
-        self.game_active = False
         main_layout = BoxLayout(
             orientation="vertical",
             padding=10,
             spacing=10,
         )
 
-        top_layout = BoxLayout(size_hint_y=None, height=100, spacing=20)
+        top_layout = BoxLayout(
+            size_hint_y=None, height=100, spacing=20, orientation="horizontal"
+        )
         self.timer_label = Label(text="Time: 00:00.0", font_size=24, halign="center")
         self.best_time_label = Label(
             text="Best Time: --:--.--", font_size=24, halign="center"
@@ -26,6 +28,15 @@ class Gamescreen(Screen):
 
         top_layout.add_widget(self.timer_label)
         top_layout.add_widget(self.best_time_label)
+        top_layout.add_widget(Widget(size_hint_x=1))
+        stop_button = Button(
+            text=" ||",
+            size_hint=(None, None),
+            size=(150, 40),
+        )
+        stop_button.bind(on_release=self.stop_game)
+        top_layout.add_widget(stop_button)
+
         main_layout.add_widget(top_layout)
 
         middle_layout = AnchorLayout()
@@ -45,16 +56,10 @@ class Gamescreen(Screen):
             size_hint=(None, None),
             size=(200, 50),
         )
-        stop_button = Button(
-            text="Stop Game",
-            size_hint=(None, None),
-            size=(200, 50),
-        )
 
         back_button.bind(on_release=self.go_to_menu)
-        stop_button.bind(on_release=self.stop_game)
         bottom_layout.add_widget(back_button)
-        bottom_layout.add_widget(stop_button)
+
         main_layout.add_widget(bottom_layout)
 
         self.add_widget(main_layout)
@@ -62,6 +67,7 @@ class Gamescreen(Screen):
         self.timer_event = None
         self.time_elapsed = 0
         self.best_time = None
+        self.game_active = False
 
     def go_to_menu(self, instance):
         self.manager.current = "main_menu"  # เปลี่ยนกลับไปที่เมนูหลัก
