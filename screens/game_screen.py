@@ -11,6 +11,7 @@ from kivy.uix.label import Label
 class Gamescreen(Screen):
     def __init__(self, **params):
         super().__init__(**params)
+        self.game_active = False
         main_layout = BoxLayout(
             orientation="vertical",
             padding=10,
@@ -68,6 +69,7 @@ class Gamescreen(Screen):
 
     def start_timer(self):
         """เริ่มจับเวลา"""
+        self.game_active = True
         self.time_elapsed = 0
         self.timer_event = Clock.schedule_interval(self.update_timer, 0.1)
 
@@ -83,6 +85,7 @@ class Gamescreen(Screen):
 
     def stop_game(self, instance):
         self.stop_timer(game_completed=False)
+        self.game_active = False
 
     def stop_timer(self, game_completed=False):
         """หยุดจับเวลาเมื่อจบเกม"""
@@ -90,7 +93,7 @@ class Gamescreen(Screen):
             Clock.unschedule(self.timer_event)
             self.timer_event = None
 
-        best_time_text = self.best_time_label.text  
+        best_time_text = self.best_time_label.text
 
         if game_completed:
             if self.best_time is None or self.time_elapsed < self.best_time:
@@ -106,6 +109,7 @@ class Gamescreen(Screen):
                 difficulty_screen.update_best_time(best_time_text)
 
     def set_difficulty(self, difficulty):
+        self.game_active = True
         self.card_manager.set_difficulty(difficulty)
         self.start_timer()
 

@@ -29,7 +29,8 @@ class CardManager:
 
     def check_match(self, card):
         if (
-            card.is_matched
+            not self.gamescreen.game_active
+            or card.is_matched
             or card in self.selected_cards
             or self.is_processing
             or len(self.selected_cards) >= 2
