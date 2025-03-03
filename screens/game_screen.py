@@ -21,21 +21,37 @@ class Gamescreen(Screen):
         top_layout = BoxLayout(
             size_hint_y=None, height=100, spacing=20, orientation="horizontal"
         )
-        self.timer_label = Label(text="Time: 00:00.0", font_size=24, halign="center")
+        self.timer_label = Label(
+            text="Time: 00:00.0",
+            font_size=24,
+            halign="left",
+            size_hint_x=None,
+            width=200,
+        )
         self.best_time_label = Label(
-            text="Best Time: --:--.--", font_size=24, halign="center"
+            text="Best Time: --:--.--",
+            font_size=24,
+            halign="left",
+            size_hint_x=None,
+            width=200,
         )
 
-        top_layout.add_widget(self.timer_label)
-        top_layout.add_widget(self.best_time_label)
-        top_layout.add_widget(Widget(size_hint_x=1))
+        spacer = Widget(size_hint_x=1)
+
+        stop_anchor = AnchorLayout(anchor_x="right", size_hint_x=None, width=150)
+
         self.stop_button = Button(
-            text=" ||",
+            text="||",
             size_hint=(None, None),
             size=(150, 40),
         )
         self.stop_button.bind(on_release=self.toggle_stop_game)
-        top_layout.add_widget(self.stop_button)
+        stop_anchor.add_widget(self.stop_button)
+
+        top_layout.add_widget(self.timer_label)
+        top_layout.add_widget(self.best_time_label)
+        top_layout.add_widget(spacer)
+        top_layout.add_widget(stop_anchor)
 
         main_layout.add_widget(top_layout)
 
@@ -91,15 +107,14 @@ class Gamescreen(Screen):
         self.timer_label.text = f"Time: {minutes:02}:{seconds:02}.{milliseconds}"
 
     def toggle_stop_game(self, instance):
-        """ กดปุ่มเพื่อสลับระหว่างหยุดเกมกับเล่นเกมต่อ """
+        """กดปุ่มเพื่อสลับระหว่างหยุดเกมกับเล่นเกมต่อ"""
         if self.is_stopped:
             self.resume_game()  # เล่นต่อ
         else:
             self.stop_game()  # หยุดเกม
 
-   
     def stop_game(self, *args):
-        """ หยุดเกมชั่วคราว โดยไม่ลบค่าจับเวลา """
+        """หยุดเกมชั่วคราว โดยไม่ลบค่าจับเวลา"""
         if self.timer_event:
             Clock.unschedule(self.update_timer)  # หยุดชั่วคราว แต่ไม่ลบค่า
             self.timer_event = None  # ล้างตัวแปร event แต่ไม่รีเซ็ตเวลา
@@ -108,12 +123,15 @@ class Gamescreen(Screen):
         self.game_active = False
 
     def resume_game(self):
-        """ เล่นเกมต่อ """
+        """เล่นเกมต่อ"""
         if self.timer_event is None:  # ตรวจสอบว่ากำลังหยุดอยู่จริง
-            self.timer_event = Clock.schedule_interval(self.update_timer, 0.1)  # เริ่มจับเวลาต่อ
+            self.timer_event = Clock.schedule_interval(
+                self.update_timer, 0.1
+            )  # เริ่มจับเวลาต่อ
         self.is_stopped = False
         self.stop_button.text = "Pause"  # เปลี่ยนปุ่มเป็น "หยุดเกม"
         self.game_active = True
+
     def stop_timer(self, game_completed=False):
         """หยุดจับเวลาเมื่อจบเกม"""
         if self.timer_event:
