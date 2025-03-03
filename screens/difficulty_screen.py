@@ -61,4 +61,5 @@ class DifficultyScreen(Screen):
 
     def update_best_time(self, best_time):
         """อัปเดตค่า Best Time ที่ได้รับจาก Gamescreen"""
+        print(f"Updating Best Time in Difficulty Screen: {best_time}")
         self.best_time_label.text = best_time

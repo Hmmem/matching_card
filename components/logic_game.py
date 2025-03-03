@@ -69,7 +69,7 @@ class CardManager:
     def check_game_status(self):
         print("check_game_status() ถูกเรียก")
         if all(card.is_matched for card in self.cards):
-            print("Game Over: You Win!")
+            print("🎉 Game Over: Calling stop_timer(True)")
             self.gamescreen.stop_timer(
                 game_completed=True
             )  # Debugging ตรวจสอบว่าเกมจบแล้วจริง

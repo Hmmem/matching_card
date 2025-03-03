@@ -106,6 +106,8 @@ class Gamescreen(Screen):
 
         self.timer_label.text = f"Time: {minutes:02}:{seconds:02}.{milliseconds}"
 
+        print(f"⏳ Timer Running: {self.time_elapsed} ({minutes}:{seconds}.{milliseconds})")  # ✅ Debug
+
     def toggle_stop_game(self, instance):
         """กดปุ่มเพื่อสลับระหว่างหยุดเกมกับเล่นเกมต่อ"""
         if self.is_stopped:
@@ -137,19 +139,25 @@ class Gamescreen(Screen):
         if self.timer_event:
             Clock.unschedule(self.timer_event)
             self.timer_event = None
+        print(f"⏱ Current Time Elapsed: {self.time_elapsed}")
 
         best_time_text = self.best_time_label.text
 
         if game_completed:
             if self.best_time is None or self.time_elapsed < self.best_time:
-                self.best_time = self.time_elapsed  # อัปเดตค่าที่ดีที่สุด
+                self.best_time = self.time_elapsed  # ✅ อัปเดตค่าที่ดีที่สุด
+                print(f"✅ New Best Time Recorded: {self.best_time}")  # ✅ Debug
+
                 minutes = self.best_time // 600
                 seconds = (self.best_time // 10) % 60
                 milliseconds = self.best_time % 10
-                self.best_time_label.text = (
-                    f"Best Time: {minutes:02}:{seconds:02}.{milliseconds}"
-                )
-                self.best_time_label.text = best_time_text
+
+                best_time_text = f"Best Time: {minutes:02}:{seconds:02}.{milliseconds}"
+                print(f"🏆 Saving Best Time: {best_time_text}")  # ✅ Debug
+
+                self.best_time_label.text = best_time_text  # ✅ อัปเดต Best Time บนเกม
+
+                # ✅ ส่งค่า Best Time ไปที่หน้าเลือกความยาก
                 difficulty_screen = self.manager.get_screen("Difficulty")
                 difficulty_screen.update_best_time(best_time_text)
 
