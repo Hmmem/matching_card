@@ -7,6 +7,7 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.clock import Clock
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
+from kivy.uix.popup import Popup
 
 
 class Gamescreen(Screen):
@@ -24,14 +25,14 @@ class Gamescreen(Screen):
         self.timer_label = Label(
             text="Time: 00:00.0",
             font_size=24,
-            halign="left",
+            halign="center",
             size_hint_x=None,
             width=200,
         )
         self.best_time_label = Label(
             text="Best Time: --:--.--",
             font_size=24,
-            halign="left",
+            halign="center",
             size_hint_x=None,
             width=200,
         )
@@ -43,7 +44,7 @@ class Gamescreen(Screen):
         self.stop_button = Button(
             text="||",
             size_hint=(None, None),
-            size=(150, 40),
+            size=(80, 80),
         )
         self.stop_button.bind(on_release=self.toggle_stop_game)
         stop_anchor.add_widget(self.stop_button)
@@ -61,20 +62,7 @@ class Gamescreen(Screen):
         middle_layout.add_widget(self.grid)
         main_layout.add_widget(middle_layout)
 
-        bottom_layout = BoxLayout(
-            size_hint_y=None,
-            height=50,
-            orientation="horizontal",
-            spacing=20,
-        )
-        back_button = Button(
-            text="Back to Menu",
-            size_hint=(None, None),
-            size=(200, 50),
-        )
-
-        back_button.bind(on_release=self.go_to_menu)
-        bottom_layout.add_widget(back_button)
+        bottom_layout = BoxLayout(size_hint_y=None, height=10)
 
         main_layout.add_widget(bottom_layout)
 
@@ -85,10 +73,15 @@ class Gamescreen(Screen):
         self.best_time = None
         self.game_active = True
         self.is_stopped = False
+        self.popup = None
 
-    def go_to_menu(self, instance):
+    def go_to_menu(self, instance=None):
         self.manager.current = "main_menu"  # เปลี่ยนกลับไปที่เมนูหลัก
         self.stop_timer(game_completed=False)
+        self.is_stopped = False
+
+        if self.popup:
+            self.popup.dismiss()
 
     def start_timer(self):
         """เริ่มจับเวลา"""
@@ -106,7 +99,9 @@ class Gamescreen(Screen):
 
         self.timer_label.text = f"Time: {minutes:02}:{seconds:02}.{milliseconds}"
 
-        print(f"⏳ Timer Running: {self.time_elapsed} ({minutes}:{seconds}.{milliseconds})")  # ✅ Debug
+        print(
+            f"⏳ Timer Running: {self.time_elapsed} ({minutes}:{seconds}.{milliseconds})"
+        )  # ✅ Debug
 
     def toggle_stop_game(self, instance):
         """กดปุ่มเพื่อสลับระหว่างหยุดเกมกับเล่นเกมต่อ"""
@@ -121,8 +116,13 @@ class Gamescreen(Screen):
             Clock.unschedule(self.update_timer)  # หยุดชั่วคราว แต่ไม่ลบค่า
             self.timer_event = None  # ล้างตัวแปร event แต่ไม่รีเซ็ตเวลา
         self.is_stopped = True
-        self.stop_button.text = "Resume"  # เปลี่ยนปุ่มเป็น "เล่นต่อ"
-        self.game_active = False
+
+        self.popup = PausePopup(
+            resume_callback=self.resume_game,
+            quit_callback=self.go_to_menu,
+        )
+
+        self.popup.open()
 
     def resume_game(self):
         """เล่นเกมต่อ"""
@@ -131,8 +131,9 @@ class Gamescreen(Screen):
                 self.update_timer, 0.1
             )  # เริ่มจับเวลาต่อ
         self.is_stopped = False
-        self.stop_button.text = "Pause"  # เปลี่ยนปุ่มเป็น "หยุดเกม"
-        self.game_active = True
+
+        if self.popup:
+            self.popup.dismiss()
 
     def stop_timer(self, game_completed=False):
         """หยุดจับเวลาเมื่อจบเกม"""
@@ -172,3 +173,23 @@ class Gamescreen(Screen):
             self.grid.cols = 4
         elif difficulty == "Hard":
             self.grid.cols = 6
+
+
+class PausePopup(Popup):
+    def __init__(self, resume_callback, quit_callback, **kwargs):
+        super().__init__(**kwargs)
+        self.title = "Game Paused"
+        self.size_hint = (0.7, 0.4)
+        self.auto_dismiss = False
+
+        content = BoxLayout(orientation="vertical", padding=10, spacing=10)
+
+        resume_button = Button(text="Resume Game", size_hint_y=None, height=50)
+        resume_button.bind(on_release=lambda x: resume_callback())
+
+        back_button = Button(text="Back to Menu", size_hint_y=None, height=50)
+        back_button.bind(on_release=lambda x: quit_callback())
+
+        content.add_widget(resume_button)
+        content.add_widget(back_button)
+        self.add_widget(content)
