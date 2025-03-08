@@ -8,12 +8,16 @@ from kivy.clock import Clock
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
+from kivy.uix.behaviors import ButtonBehavior
 from kivy.app import App
 
 
 class Gamescreen(Screen):
     def __init__(self, **params):
         super().__init__(**params)
+        self.time_freeze_used = False
+        self.timer_paused = False
+
         main_layout = BoxLayout(
             orientation="vertical",
             padding=10,
@@ -66,7 +70,23 @@ class Gamescreen(Screen):
         middle_layout.add_widget(self.grid)
         main_layout.add_widget(middle_layout)
 
-        bottom_layout = BoxLayout(size_hint_y=None, height=10)
+        bottom_layout = BoxLayout(
+            size_hint_y=None,
+            height=50,
+            spacing=20,
+            orientation="horizontal",
+            padding=(0, 0, 0, 10),
+        )
+
+        self.freeze_button = FreezeButton(
+            text="Time Stop",
+            font_size=24,
+            size_hint=(None, None),
+            size=(140, 50),
+            disabled=False,
+        )
+        self.freeze_button.bind(on_release=self.use_time_freeze)
+        bottom_layout.add_widget(self.freeze_button)
 
         main_layout.add_widget(bottom_layout)
 
@@ -78,6 +98,26 @@ class Gamescreen(Screen):
         self.game_active = True
         self.is_stopped = False
         self.popup = None
+
+    def use_time_freeze(self, instance):
+        if not self.time_freeze_used and self.game_active:
+            self.time_freeze_used = True
+            self.timer_paused = True
+            self.freeze_button.disabled = True
+            self.freeze_button.background_color = (0.5, 0.5, 0.5, 1)
+
+            Clock.schedule_once(lambda dt: self.resume_time(), 5)
+
+    def resume_time(self):
+        self.timer_paused = False
+
+    def on_enter(self):
+        self.time_freeze_used = False
+        self.freeze_button.disabled = False
+
+        app = App.get_running_app()
+        if app.background_music and app.background_music.state != "play":
+            app.background_music.play()
 
     def go_to_menu(self, instance=None):
         self.manager.current = "main_menu"  # เปลี่ยนกลับไปที่เมนูหลัก
@@ -91,11 +131,14 @@ class Gamescreen(Screen):
         """เริ่มจับเวลา"""
         self.game_active = True
         self.time_elapsed = 0
+        self.time_freeze_used = False
+        self.freeze_button.disabled = False
         self.timer_event = Clock.schedule_interval(self.update_timer, 0.1)
 
     def update_timer(self, dt):
         """อัปเดตเวลาใน Label ทุก 0.1 วินาที"""
-        self.time_elapsed += 1  # นับเป็นหน่วยของ 0.1 วินาที
+        if not self.timer_paused:  # ตรวจสอบสถานะหยุดเวลา
+            self.time_elapsed += 1  # นับเป็นหน่วยของ 0.1 วินาที
 
         minutes = self.time_elapsed // 600  # 1 นาที = 600 หน่วย (0.1 * 600 = 60 วินาที)
         seconds = (self.time_elapsed // 10) % 60  # 1 วินาที = 10 หน่วย
@@ -198,3 +241,7 @@ class PausePopup(Popup):
     def quit_game(self):
         self.quit_callback()
         self.dismiss()
+
+
+class FreezeButton(ButtonBehavior, Label):
+    pass

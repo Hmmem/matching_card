@@ -3,6 +3,7 @@ from kivy.clock import Clock
 from .cards import Card
 from kivy.animation import Animation
 from kivy.uix.label import Label
+from kivy.app import App
 
 
 class CardManager:
@@ -74,6 +75,8 @@ class CardManager:
                 game_completed=True
             )  # Debugging ตรวจสอบว่าเกมจบแล้วจริง
             Clock.schedule_once(lambda dt: self.reset_game(), 2)  # กลับเมนูหลัง 2 วิ
+            app = App.get_running_app()
+            app.stop_music()
 
     def reset_game(self):
         """รีเซ็ตเกมและกลับไปที่เมนูหลัก"""

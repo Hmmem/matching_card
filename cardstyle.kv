@@ -6,6 +6,8 @@
     background_color: (0, 0, 0, 0)
     color: (0, 0, 0, 0) if not root.is_face_up else (0, 0, 0, 1)
     text: self.symbol if root.is_face_up else ''
+    font_size: 28
+    bold: True
     
     canvas.before:
         Color:

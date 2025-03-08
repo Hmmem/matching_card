@@ -23,7 +23,6 @@ class MyGame(App):
         if self.background_music:
             self.background_music.loop = True
             self.background_music.volume = 0.5
-            self.background_music.play()
 
         SM = ScreenManager()
         SM.add_widget(Mainmenuscreen(name="main_menu"))
