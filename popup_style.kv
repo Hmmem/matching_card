@@ -1,0 +1,34 @@
+<PausePopup>:
+    title: "Game Paused"
+    size_hint: (0.4, 0.3)
+    auto_dismiss: False
+
+    canvas.before:
+        Color:
+            rgba: (0.2, 0.2, 0.2, 1) 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: 20
+        spacing: 10
+
+        Button:
+            text: "Resume Game"
+            size_hint_y: None
+            height: 50
+            background_normal: ""  
+            background_color: (0.2, 0.6, 1, 1)  
+            color: (1, 1, 1, 1)  
+            on_release: root.resume_game()
+
+        Button:
+            text: "Back to Menu"
+            size_hint_y: None
+            height: 50
+            background_normal: ""
+            background_color: (1, 0.2, 0.2, 1)  
+            color: (1, 1, 1, 1)  
+            on_release: root.quit_game()

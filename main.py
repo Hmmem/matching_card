@@ -7,6 +7,7 @@ from kivy.core.audio import SoundLoader
 
 Builder.load_file("gamesceenstyle.kv")
 Builder.load_file("cardstyle.kv")
+Builder.load_file("popup_style.kv")
 
 
 class MyScreenManager(ScreenManager):
@@ -30,9 +31,13 @@ class MyGame(App):
         SM.add_widget(Gamescreen(name="Game"))
         return SM
 
-    def on_stop(self):
+    def stop_music(self):
         if self.background_music:
             self.background_music.stop()
+
+    def resume_music(self):
+        if self.background_music and self.background_music.state != "play":
+            self.background_music.play()
 
 
 if __name__ == "__main__":

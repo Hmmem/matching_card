@@ -8,6 +8,7 @@ from kivy.clock import Clock
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
+from kivy.app import App
 
 
 class Gamescreen(Screen):
@@ -42,7 +43,10 @@ class Gamescreen(Screen):
         stop_anchor = AnchorLayout(anchor_x="right", size_hint_x=None, width=150)
 
         self.stop_button = Button(
-            text="||",
+            text="",
+            background_normal="icons8-settings-80.png",
+            background_down="icons8-settings-80.png",
+            border=(0, 0, 0, 0),
             size_hint=(None, None),
             size=(80, 80),
         )
@@ -124,6 +128,9 @@ class Gamescreen(Screen):
 
         self.popup.open()
 
+        app = App.get_running_app()
+        app.stop_music()
+
     def resume_game(self):
         """เล่นเกมต่อ"""
         if self.timer_event is None:  # ตรวจสอบว่ากำลังหยุดอยู่จริง
@@ -134,6 +141,9 @@ class Gamescreen(Screen):
 
         if self.popup:
             self.popup.dismiss()
+
+        app = App.get_running_app()
+        app.resume_music()
 
     def stop_timer(self, game_completed=False):
         """หยุดจับเวลาเมื่อจบเกม"""
@@ -178,18 +188,13 @@ class Gamescreen(Screen):
 class PausePopup(Popup):
     def __init__(self, resume_callback, quit_callback, **kwargs):
         super().__init__(**kwargs)
-        self.title = "Game Paused"
-        self.size_hint = (0.7, 0.4)
-        self.auto_dismiss = False
+        self.resume_callback = resume_callback
+        self.quit_callback = quit_callback
 
-        content = BoxLayout(orientation="vertical", padding=10, spacing=10)
+    def resume_game(self):
+        self.resume_callback()
+        self.dismiss()
 
-        resume_button = Button(text="Resume Game", size_hint_y=None, height=50)
-        resume_button.bind(on_release=lambda x: resume_callback())
-
-        back_button = Button(text="Back to Menu", size_hint_y=None, height=50)
-        back_button.bind(on_release=lambda x: quit_callback())
-
-        content.add_widget(resume_button)
-        content.add_widget(back_button)
-        self.add_widget(content)
+    def quit_game(self):
+        self.quit_callback()
+        self.dismiss()
